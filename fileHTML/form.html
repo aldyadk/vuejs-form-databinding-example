@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+      .bordered {
+        border:1px solid black;
+      }
+    </style>
+
+  </head>
+  <body>
+    <form  class="bordered" action="/form" action="GET">
+      <h3>Ini form pake GET dan submit form biasa (pindah/refresh halaman)</h3>
+      <h3>Cek query parameter (url di-atas) utk lihat data yg kekirim</h3>
+      <h3>Cek jg console.log di express(BE)</h3>
+      <label>Nama</label><br>
+      <input type="text" name="nama"><br>
+      <label>Password</label><br>
+      <input type="password" name="password"><br>
+      <!-- perhatikan, radio button 'name' harus sama -->
+      <label>Jenis Kelamin</label><br>
+      <input type="radio" name="gender" value="male">Pria<br>
+      <input type="radio" name="gender" value="female">Wanita<br>
+      <label>Tes Default Radio</label><br>
+      <!-- ini contoh radio button ada yg default checked -->
+      <input type="radio" name="tesRadio" value="aaa">Tes<br>
+      <input type="radio" name="tesRadio" value="bbb" checked>Ini Default checked<br>
+      <!-- perhatikan, klo checkbox 'name' beda -->
+      <input type="checkbox" name="ch1" >Ini default<br>
+      <input type="checkbox" name="ch2" value="true">Ini value diganti string true<br>
+      <input type="checkbox" name="ch3" value="qwerty">Ini value diganti qwerty<br>
+      <input type="checkbox" name="ch4" value="blabla" checked>Ini default checked/selected<br>
+      <button type="submit">Submit</button>
+    </form>
+    <form class="bordered" id="app" v-on:submit.prevent="kirimData">
+      <h3>Ini form ajax POST pake axios & vue ga pake pindah halaman (prevent default)</h3>
+      <h3>Cek request payload di Tab Network browser developer console </h3>
+      <h3>Cek jg console.log di express(BE)</h3>
+      <label>Nama</label><br>
+      <input type="text" v-model="nama"><br>
+      <label>Password</label><br>
+      <input type="password" v-model="password"><br>
+      <!-- perhatikan, radio button 'v-model' harus sama -->
+      <label>Jenis Kelamin</label><br>
+      <input type="radio" v-model="gender" value="male">Pria<br>
+      <input type="radio" v-model="gender" value="female">Wanita<br>
+      <!-- ini contoh radio button ada yg default checked, 
+        di data Vuenya harus sama dengan value agar checked by default-->
+      <input type="radio" v-model="tesRadio" value="aaa">Tes<br>
+      <input type="radio" v-model="tesRadio" value="bbb">Ini Default checked/selected<br>
+      <!-- perhatikan, klo checkbox 'v-model' beda -->
+      <input type="checkbox" v-model="ch1">Ini biasa<br>
+      <input type="checkbox" v-model="ch2">Klo pake vue, checkbox ga bs custom string value, hanya true/false<br>
+      <input type="checkbox" v-model="ch3">Tapi tetep bisa diatur apakah default checked/ngga<br>
+      <input type="checkbox" v-model="ch4">Ini contoh default checked<br>
+      <button type="submit">Submit</button>
+    </form>
+    <script>
+      var app = new Vue({
+        el: '#app',
+        data: {
+          nama: '',
+          password: '',
+          gender: '',
+          tesRadio: 'bbb',
+          ch1: false,
+          ch2: false,
+          ch3: false,
+          ch4: true,
+        },
+        methods: {
+          kirimData: function(){
+            axios.post('/form',{
+              nama: this.nama,
+              password: this.password,
+              gender: this.gender,
+              tesRadio: this.tesRadio,
+              ch1: this.ch1,
+              ch2: this.ch2,
+              ch3: this.ch3,
+              ch4: this.ch4,
+            }).then(res=>{
+              alert(`Ini balesan dari BE\nStatus:${res.status}\nData Yg Dikirim:${JSON.stringify(res.data,null,2)}`)
+            })
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
