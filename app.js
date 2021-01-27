@@ -9,8 +9,10 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
 
+// komen
+
 app.get('/',(req,res)=>{
-  res.send('cobain route /form')
+  res.send('cobain route yg /form')
 })
 
 app.get('/form', (req,res)=>{
